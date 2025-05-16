@@ -1,9 +1,12 @@
+MAIN = templates/main.cpp
+TASK = a b c d e f g
 
 clean :
-	rm -f a.cpp b.cpp c.cpp d.cpp e.cpp f.cpp
+	rm -f a.cpp b.cpp c.cpp d.cpp e.cpp f.cpp g.cpp
 	rm -f ./a.out ans.txt
 
 new : clean
-	cp t.cpp a.cpp && cp t.cpp b.cpp && cp t.cpp c.cpp && cp t.cpp d.cpp && cp t.cpp e.cpp && cp t.cpp f.cpp
+	for t in $(TASK); do cp $(MAIN) $$t.cpp; done
+
 %:
 	c++ $@.cpp && ./a.out > ans.txt && cat ans.txt
