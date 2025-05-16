@@ -1,0 +1,87 @@
+#define MULT_TEST
+#include <bits/stdc++.h>
+using namespace std;
+
+// TYPE
+using ll	=	long long;
+using llu	=	unsigned long long;
+using ld	=	long double;
+using vi	=	vector<int>;
+using vll	=	vector<ll>;
+using vllu	=	vector<llu>;
+using pii	=	pair<int, int>;
+using pll	=	pair<ll, ll>;
+using pllu	=	pair<llu, llu>;
+
+// MACRO
+#define debug(x) cerr << #x << ": " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+
+#define sp <<" "<<
+#define pb push_back
+#define pf push_front
+#define eb emplace_back
+#define ef emplace_front
+#define fi first
+#define se second
+
+// CONST
+constexpr ll MOD = 1000000007;
+constexpr int INF = 1<<30;
+constexpr ll LINF = 1LL<<62;
+
+// FUNC
+void yes() {cout << "Yes\n";}
+void no() {cout << "No\n";}
+ll gcd(ll a, ll b) {return __gcd(a,b);}
+ll lcm(ll a, ll b) {return a/gcd(a,b)*b;}
+ll addMod(ll a, ll b) {return ((a%MOD)+(b%MOD))%MOD;}
+ll subMod(ll a, ll b) {return ((a%MOD)-(b%MOD)+MOD)%MOD;}
+ll mulMod(ll a, ll b) {return ((a%MOD)*(b%MOD))%MOD;}
+ll powMod(ll a, ll b){if(!b)return 1;ll r=powMod(a,b/2);r=mulMod(r,r);return(b%2?mulMod(a,r):r);}
+
+template <typename T>
+ostream& operator<<(ostream& os, const vector<T>& v) {
+	for (ll i=0; i<v.size(); i++) os<<v[i]<<(i!=v.size()-1?' ':'\n');
+	return os;
+}
+template <typename T>
+istream& operator>>(istream& is, vector<T>& v) {
+	for (auto& e : v) is>>e;
+	return is;
+}
+
+//safe hmap
+struct custom_hash {
+	static uint64_t splitmix64(uint64_t x) {
+		x += 0x9e3779b97f4a7c15;
+		x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+		x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+		return x ^ (x >> 31);
+	}
+
+	size_t operator()(uint64_t x) const {
+		static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+		return splitmix64(x + FIXED_RANDOM);
+	}
+};
+using mapll = unordered_map<ll, ll, custom_hash>;
+using setll = unordered_set<ll, custom_hash>;
+
+void runTest();
+
+int main()
+{
+	ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+	int tc = 1;
+	#ifdef MULT_TEST
+	cin >> tc;
+	#endif
+	for(ll test=0; test<tc; test++) {
+		runTest();
+	}
+}
+
+void runTest()
+{
+}
