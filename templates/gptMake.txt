@@ -1,0 +1,46 @@
+MAIN = templates/main.cpp
+TASKS = a b c d e f g
+
+# Compiler and flags
+CXX = g++
+CXXFLAGS = -std=c++17 -O2          # default build flags
+DEBUGFLAGS = -g3 -Wall -fsanitize=address -DDEBUG
+
+# Run command by default just runs the binary
+RUN = ./a.out
+
+.PHONY: clean new debug run_gdb run_valgrind
+
+# Clean generated files
+clean:
+	rm -f $(TASKS:=.cpp) a.out ans.txt
+
+# Create new task files from template
+new:
+	for t in $(TASKS); do cp $(MAIN) $$t.cpp; done
+
+# Build a specific task (e.g. 'make c')
+%: %.cpp
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+# Run the compiled binary and save output to ans.txt
+run: %
+	./$< > ans.txt
+	cat ans.txt
+
+# Build with debug flags
+debug: CXXFLAGS += $(DEBUGFLAGS)
+debug: clean
+debug: %
+
+# Run with gdb
+run_gdb: debug
+	gdb --args ./$(word 1,$(MAKECMDGOALS))
+
+# Run with valgrind
+run_valgrind: debug
+	valgrind --leak-check=full ./$(word 1,$(MAKECMDGOALS))
+
+# Example single test case run (pass input manually)
+interactive: %
+	./$<
