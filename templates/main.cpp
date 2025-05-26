@@ -86,4 +86,8 @@ int main()
 
 void runTest()
 {
+	ll n;
+	cin >> n;
+	vll a(n);
+	cin >> a;
 }
