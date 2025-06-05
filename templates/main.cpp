@@ -44,7 +44,7 @@ ll powMod(ll a, ll b){if(!b)return 1;ll r=powMod(a,b/2);r=mulMod(r,r);return(b%2
 
 template <typename T>
 ostream& operator<<(ostream& os, const vector<T>& v) {
-	for (ll i=0; i<v.size(); i++) os<<v[i]<<(i!=v.size()-1?' ':'\n');
+	for (ll i=0;i<v.size();i++) os<<v[i]<<(i+1<v.size()?' ':'\n');
 	return os;
 }
 template <typename T>
