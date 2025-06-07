@@ -8,17 +8,16 @@ using llu	=	unsigned long long;
 using ld	=	long double;
 using vi	=	vector<int>;
 using vb	=	vector<bool>;
+using vvb	=	vector<vb>;
 using vll	=	vector<ll>;
 using vvll	=	vector<vll>;
 using vllu	=	vector<llu>;
+using vs	=	vector<string>;
 using pii	=	pair<int, int>;
 using pll	=	pair<ll, ll>;
 using pllu	=	pair<llu, llu>;
 
 // MACRO
-#define debug(x) cerr << #x << ": " << (x) << endl;
-#define all(x) (x).begin(), (x).end()
-
 #define sp <<" "<<
 #define pb push_back
 #define pf push_front
@@ -26,6 +25,11 @@ using pllu	=	pair<llu, llu>;
 #define ef emplace_front
 #define fi first
 #define se second
+#define be begin()
+#define en end()
+
+#define debug(x) cerr << #x << ": " << (x) << endl;
+#define all(x) (x).be, (x).en
 
 // CONST
 constexpr ll MOD = 1000000007;
@@ -44,7 +48,7 @@ ll powMod(ll a, ll b){if(!b)return 1;ll r=powMod(a,b/2);r=mulMod(r,r);return(b%2
 
 template <typename T>
 ostream& operator<<(ostream& os, const vector<T>& v) {
-	for (ll i=0;i<v.size();i++) os<<v[i]<<(i+1<v.size()?' ':'\n');
+	for (ll i=0;i<v.size();i++) os<<v[i]<<" \n"[i+1==v.size()];
 	return os;
 }
 template <typename T>
