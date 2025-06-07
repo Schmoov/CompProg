@@ -1,6 +1,6 @@
 MAIN = templates/main.cpp
 TASK = a b c d e f g
-FLAGS = -Wall -Wextra -pedantic
+FLAGS = -Wall -Wextra -pedantic -Wshadow
 
 clean :
 	find . -maxdepth 1 -type f ! -name Makefile -exec rm -f {} +
