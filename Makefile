@@ -9,4 +9,7 @@ new : clean
 	for t in $(TASK); do cp $(MAIN) $$t.cpp; done
 
 %:
-	c++ $(FLAGS) $@.cpp && ./a.out > ans.txt && cat ans.txt
+	c++ $(FLAGS) $@.cpp\
+		&& ./a.out > ans.txt\
+		&& echo "~~~~~~~~~"\
+		&& cat ans.txt
