@@ -2,6 +2,8 @@
 #pragma GCC optimize ("O3")
 #include <bits/stdc++.h>
 using namespace std;
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
 
 // TYPE
 using ll	=	long long;
@@ -58,7 +60,7 @@ istream& operator>>(istream& is, vector<T>& v) {
 	return is;
 }
 
-//safe hmap
+//safe hashing
 struct custom_hash {
 	static uint64_t splitmix64(uint64_t x) {
 		x += 0x9e3779b97f4a7c15;
@@ -72,7 +74,8 @@ struct custom_hash {
 		return splitmix64(x + FIXED_RANDOM);
 	}
 };
-using mapll = unordered_map<ll, ll, custom_hash>;
+using mapll = gp_hash_table<ll, ll, custom_hash>;
+using oldMapll = unordered_map<ll, ll, custom_hash>;
 using setll = unordered_set<ll, custom_hash>;
 
 void runTest();
