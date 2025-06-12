@@ -77,6 +77,7 @@ struct custom_hash {
 using mapll = gp_hash_table<ll, ll, custom_hash>;
 using oldMapll = unordered_map<ll, ll, custom_hash>;
 using setll = unordered_set<ll, custom_hash>;
+using idx_set = tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void runTest();
 
