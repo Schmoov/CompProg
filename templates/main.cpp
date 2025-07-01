@@ -19,7 +19,7 @@ using vs	=	vector<string>;
 using pii	=	pair<int, int>;
 using pll	=	pair<ll, ll>;
 using pllu	=	pair<llu, llu>;
-using graph	=	vector<list<ll>>;
+using edge	=	vector<list<ll>>;
 
 // MACRO
 #define sp <<" "<<
@@ -33,8 +33,14 @@ using graph	=	vector<list<ll>>;
 #define en end()
 
 #define dbg(x) cerr << #x << ": " << (x) << endl;
-#define all(x) (x).be, (x).en
 #define sz(x) ((int)x.size())
+#define all(x) (x).be, (x).en
+#define rall(x) (x).rbegin(), (x).rend()
+#define srt(x) sort(all(x))
+#define rsrt(x) sort(rall(x))
+#define ub(x, v) upper_bound(all(x), v)
+#define lb(x, v) lower_bound(all(x), v)
+#define rev(x) reverse(all(x))
 
 // CONST
 constexpr ll MOD = 1000000007;
@@ -51,6 +57,7 @@ ll subMod(ll a, ll b) {return ((a%MOD)-(b%MOD)+MOD)%MOD;}
 ll mulMod(ll a, ll b) {return ((a%MOD)*(b%MOD))%MOD;}
 ll powMod(ll a, ll b){if(!b)return 1;ll r=powMod(a,b/2);r=mulMod(r,r);return(b%2?mulMod(a,r):r);}
 
+//Parse
 template <typename T>
 ostream& operator<<(ostream& os, const vector<T>& v) {
 	for (size_t i=0;i<v.size();i++) os<<v[i]<<" \n"[i+1==v.size()];
@@ -61,6 +68,102 @@ istream& operator>>(istream& is, vector<T>& v) {
 	for (auto& e : v) is>>e;
 	return is;
 }
+
+//Class
+struct Graph {
+	ll n;
+	edge e;
+	Graph(ll nVert, vvll& edg, bool oneIdx = true) {
+		n = nVert;
+		e.resize(n);
+		for (auto& p : edg) {
+			ll u = p[0], v = p[1];
+			if (oneIdx)
+				u--, v--;
+			e[u].eb(v);
+			e[v].eb(u);
+		}
+	}
+	Graph(ll nVert, ll nEdg, bool oneIdx = true) {
+		vvll edg(nEdg);
+		n = nVert;
+		e.resize(n);
+		for (int i = 0; i < nEdg; i++) {
+			ll u, v;
+			cin >> u >> v;
+			if (oneIdx)
+				u--, v--;
+			e[u].eb(v);
+			e[v].eb(u);
+		}
+	}
+};
+struct DiGraph {
+	ll n;
+	edge ch;
+	edge par;
+	DiGraph(ll nVert, vvll& edg, bool oneIdx = true) {
+		n = nVert;
+		ch.resize(n);
+		par.resize(n);
+		for (auto& p : edg) {
+			ll u = p[0], v = p[1];
+			if (oneIdx)
+				u--, v--;
+			ch[u].eb(v);
+			par[v].eb(u);
+		}
+	}
+	DiGraph(ll nVert, ll nEdg, bool oneIdx = true) {
+		vvll edg(nEdg);
+		n = nVert;
+		ch.resize(n);
+		par.resize(n);
+		for (int i = 0; i < nEdg; i++) {
+			ll u, v;
+			cin >> u >> v;
+			if (oneIdx)
+				u--, v--;
+			ch[u].eb(v);
+			par[v].eb(u);
+		}
+	}
+};
+struct Dsu {
+	ll n;
+	vll rep;
+	ll comp;
+	Dsu(ll nVert, vvll& edg, bool oneIdx = true) {
+		n = nVert;
+		comp = n;
+		rep.resize(n);
+		for (int i = 0; i < n; i++)
+			rep[i] = i;
+		for (auto& p : edg) {
+			ll u = p[0], v = p[1];
+			if (oneIdx)
+				u--, v--;
+			unite(u, v);
+		}
+	}
+	Dsu(ll nVert, ll nEdg, bool oneIdx = true) {
+		n = nVert;
+		comp = n;
+		rep.resize(n);
+		for (int i = 0; i < n; i++)
+			rep[i] = i;
+		for (int i = 0; i < nEdg; i++) {
+			ll u,v;
+			cin >> u >> v;
+			if (oneIdx)
+				u--, v--;
+			unite(u, v);
+		}
+	}
+	ll find(ll u) {return rep[u] == u ? u : rep[u] = find(rep[u]);} 
+	bool isCon(ll u, ll v) {return find(u) == find(v);}
+	void unite(ll u, ll v) {if (!isCon(u, v)) comp--, rep[find(u)] = find(v);}
+};
 
 //safe hashing
 struct custom_hash {
