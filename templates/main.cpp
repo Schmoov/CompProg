@@ -19,6 +19,7 @@ using vs	=	vector<string>;
 using pii	=	pair<int, int>;
 using pll	=	pair<ll, ll>;
 using pllu	=	pair<llu, llu>;
+using graph	=	vector<list<ll>>;
 
 // MACRO
 #define sp <<" "<<
@@ -31,8 +32,9 @@ using pllu	=	pair<llu, llu>;
 #define be begin()
 #define en end()
 
-#define debug(x) cerr << #x << ": " << (x) << endl;
+#define dbg(x) cerr << #x << ": " << (x) << endl;
 #define all(x) (x).be, (x).en
+#define sz(x) ((int)x.size())
 
 // CONST
 constexpr ll MOD = 1000000007;
