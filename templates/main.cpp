@@ -19,7 +19,8 @@ using vs	=	vector<string>;
 using pii	=	pair<int, int>;
 using pll	=	pair<ll, ll>;
 using pllu	=	pair<llu, llu>;
-using edge	=	vector<list<ll>>;
+using adj	=	vector<list<ll>>;
+using wadj	=	vector<list<pll>>;
 
 // MACRO
 #define sp <<" "<<
@@ -70,13 +71,13 @@ istream& operator>>(istream& is, vector<T>& v) {
 }
 
 //Class
-struct Graph {
+struct graph {
 	ll n;
-	edge e;
-	Graph(ll nVert, vvll& edg, bool oneIdx = true) {
+	adj e;
+	graph(ll nVert, vvll& edg, bool oneIdx = true) {
 		n = nVert;
 		e.resize(n);
-		for (auto& p : edg) {
+		for (vll& p : edg) {
 			ll u = p[0], v = p[1];
 			if (oneIdx)
 				u--, v--;
@@ -84,25 +85,29 @@ struct Graph {
 			e[v].eb(u);
 		}
 	}
-	Graph(ll nVert, ll nEdg, bool oneIdx = true) {
-		vvll edg(nEdg);
+};
+
+struct wgraph {
+	ll n;
+	wadj e;
+	wgraph(ll nVert, vvll& edg, bool oneIdx = true) {
 		n = nVert;
 		e.resize(n);
-		for (int i = 0; i < nEdg; i++) {
-			ll u, v;
-			cin >> u >> v;
+		for (vll& p : edg) {
+			ll u = p[0], v = p[1];
 			if (oneIdx)
 				u--, v--;
-			e[u].eb(v);
-			e[v].eb(u);
+			e[u].pb({v, p[2]});
+			e[v].pb({u, p[2]});
 		}
 	}
 };
-struct DiGraph {
+
+struct digraph {
 	ll n;
-	edge ch;
-	edge par;
-	DiGraph(ll nVert, vvll& edg, bool oneIdx = true) {
+	adj ch;
+	adj par;
+	digraph(ll nVert, vvll& edg, bool oneIdx = true) {
 		n = nVert;
 		ch.resize(n);
 		par.resize(n);
@@ -114,26 +119,31 @@ struct DiGraph {
 			par[v].eb(u);
 		}
 	}
-	DiGraph(ll nVert, ll nEdg, bool oneIdx = true) {
-		vvll edg(nEdg);
+};
+
+struct wdigraph {
+	ll n;
+	wadj ch;
+	wadj par;
+	wdigraph(ll nVert, vvll& edg, bool oneIdx = true) {
 		n = nVert;
 		ch.resize(n);
 		par.resize(n);
-		for (int i = 0; i < nEdg; i++) {
-			ll u, v;
-			cin >> u >> v;
+		for (vll& p : edg) {
+			ll u = p[0], v = p[1];
 			if (oneIdx)
 				u--, v--;
-			ch[u].eb(v);
-			par[v].eb(u);
+			ch[u].pb({v, p[2]});
+			par[v].pb({u, p[2]});
 		}
 	}
 };
-struct Dsu {
+
+struct dsu {
 	ll n;
 	vll rep;
 	ll comp;
-	Dsu(ll nVert, vvll& edg, bool oneIdx = true) {
+	dsu(ll nVert, vvll& edg, bool oneIdx = true) {
 		n = nVert;
 		comp = n;
 		rep.resize(n);
@@ -141,20 +151,6 @@ struct Dsu {
 			rep[i] = i;
 		for (auto& p : edg) {
 			ll u = p[0], v = p[1];
-			if (oneIdx)
-				u--, v--;
-			unite(u, v);
-		}
-	}
-	Dsu(ll nVert, ll nEdg, bool oneIdx = true) {
-		n = nVert;
-		comp = n;
-		rep.resize(n);
-		for (int i = 0; i < n; i++)
-			rep[i] = i;
-		for (int i = 0; i < nEdg; i++) {
-			ll u,v;
-			cin >> u >> v;
 			if (oneIdx)
 				u--, v--;
 			unite(u, v);
@@ -179,6 +175,12 @@ struct custom_hash {
 		return splitmix64(x + FIXED_RANDOM);
 	}
 };
+
+//Custom containers
+template<typename T>
+using mxq = priority_queue<T, vector<T>, greater<T>>;
+template<typename T>
+using mnq = priority_queue<T>;
 using mapll = unordered_map<ll, ll, custom_hash>;
 using setll = unordered_set<ll, custom_hash>;
 using idx_set = tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update>;
