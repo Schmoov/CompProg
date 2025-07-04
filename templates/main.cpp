@@ -60,12 +60,22 @@ ll powMod(ll a, ll b){if(!b)return 1;ll r=powMod(a,b/2);r=mulMod(r,r);return(b%2
 
 //Parse
 template <typename T>
+ostream& operator<<(ostream& os, const vector<vector<T>>& v) {
+	for (size_t i=0;i<v.size();i++) os<<v[i];
+	return os;
+}
+template <typename T>
 ostream& operator<<(ostream& os, const vector<T>& v) {
 	for (size_t i=0;i<v.size();i++) os<<v[i]<<" \n"[i+1==v.size()];
 	return os;
 }
 template <typename T>
 istream& operator>>(istream& is, vector<T>& v) {
+	if (!sz(v)) {
+		ll n;
+		cin >> n;
+		v.resize(n);
+	}
 	for (auto& e : v) is>>e;
 	return is;
 }
@@ -73,71 +83,113 @@ istream& operator>>(istream& is, vector<T>& v) {
 //Class
 struct graph {
 	ll n;
+	ll m;
 	adj e;
-	graph(ll nVert, vvll& edg, bool oneIdx = true) {
-		n = nVert;
+	bool isDir;
+	adj par;
+	bool oneIdx;
+	graph(bool iD=false, bool oI=true)
+		:n(0), m(0), isDir(iD), oneIdx(oI) {}
+	graph(ll nV, bool iD=false, bool oI=true)
+		:n(nV), m(0), isDir(iD), oneIdx(oI)
+		{e.resize(n); if (isDir) par.resize(n);}
+	graph(ll nV, ll mE, bool iD=false, bool oI=true)
+		:n(nV), m(mE), isDir(iD), oneIdx(oI)
+		{e.resize(n); if (isDir) par.resize(n);}
+	graph(ll nV, vvll& edge, bool iD=false, bool oI = true)
+		:n(nV), m(sz(edge)), isDir(iD), oneIdx(oI) {
 		e.resize(n);
-		for (vll& p : edg) {
+		if (isDir)
+			par.resize(n);
+		for (vll& p : edge) {
 			ll u = p[0], v = p[1];
 			if (oneIdx)
 				u--, v--;
 			e[u].eb(v);
-			e[v].eb(u);
+			if (isDir)
+				par[v].eb(u);
+			else
+				e[v].eb(u);
 		}
 	}
 };
+istream& operator>>(istream& is, graph& g) {
+	if (!g.n) {
+		is >> g.n;
+		g.e.resize(g.n);
+	}
+	if (!g.m)
+		is >> g.m;
+	if (g.isDir && !sz(g.par))
+		g.par.resize(g.n);
+	for (int i = 0; i < g.m; i++) {
+		ll u, v;
+		is >> u >> v;
+		if (g.oneIdx)
+			u--, v--;
+		g.e[u].eb(v);
+		if (g.isDir)
+			g.par[v].eb(u);
+		else
+			g.e[v].eb(u);
+	}
+	return is;
+}
 
 struct wgraph {
 	ll n;
+	ll m;
 	wadj e;
-	wgraph(ll nVert, vvll& edg, bool oneIdx = true) {
-		n = nVert;
-		e.resize(n);
-		for (vll& p : edg) {
-			ll u = p[0], v = p[1];
-			if (oneIdx)
-				u--, v--;
-			e[u].pb({v, p[2]});
-			e[v].pb({u, p[2]});
-		}
-	}
-};
-
-struct digraph {
-	ll n;
-	adj ch;
-	adj par;
-	digraph(ll nVert, vvll& edg, bool oneIdx = true) {
-		n = nVert;
-		ch.resize(n);
-		par.resize(n);
-		for (auto& p : edg) {
-			ll u = p[0], v = p[1];
-			if (oneIdx)
-				u--, v--;
-			ch[u].eb(v);
-			par[v].eb(u);
-		}
-	}
-};
-
-struct wdigraph {
-	ll n;
-	wadj ch;
+	bool isDir;
 	wadj par;
-	wdigraph(ll nVert, vvll& edg, bool oneIdx = true) {
-		n = nVert;
-		ch.resize(n);
-		par.resize(n);
-		for (vll& p : edg) {
+	bool oneIdx;
+	wgraph(bool iD=false, bool oI=true)
+		:n(0), m(0), isDir(iD), oneIdx(oI) {}
+	wgraph(ll nV, bool iD=false, bool oI=true)
+		:n(nV), m(0), isDir(iD), oneIdx(oI)
+		{e.resize(n); if (isDir) par.resize(n);}
+	wgraph(ll nV, ll mE, bool iD=false, bool oI=true)
+		:n(nV), m(mE), isDir(iD), oneIdx(oI)
+		{e.resize(n); if (isDir) par.resize(n);}
+	wgraph(ll nV, vvll& edge, bool iD=false, bool oI = true)
+		:n(nV), m(sz(edge)), isDir(iD), oneIdx(oI) {
+		e.resize(n);
+		if (isDir)
+			par.resize(n);
+		for (vll& p : edge) {
 			ll u = p[0], v = p[1];
 			if (oneIdx)
 				u--, v--;
-			ch[u].pb({v, p[2]});
-			par[v].pb({u, p[2]});
+			e[u].eb(v, p[2]);
+			if (isDir)
+				par[v].eb(u, -p[2]);
+			else
+				e[v].eb(u, p[2]);
 		}
 	}
 };
+istream& operator>>(istream& is, wgraph& g) {
+	if (!g.n) {
+		is >> g.n;
+		g.e.resize(g.n);
+	}
+	if (!g.m)
+		is >> g.m;
+	if (g.isDir && !sz(g.par))
+		g.par.resize(g.n);
+	for (int i = 0; i < g.m; i++) {
+		ll u, v, w;
+		is >> u >> v >> w;
+		if (g.oneIdx)
+			u--, v--;
+		g.e[u].eb(v, w);
+		if (g.isDir)
+			g.par[v].eb(u, -w);
+		else
+			g.e[v].eb(u, w);
+	}
+	return is;
+}
 
 struct dsu {
 	ll n;
